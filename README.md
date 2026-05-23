@@ -22,32 +22,26 @@ Designed and implemented a **cloud-based data platform on AWS** supporting batch
 
 ---
 
-## 🏗 Architecture Overview
+## 🧭 Architecture Overview
 
-```mermaid
-flowchart LR
+This project demonstrates a **cloud data platform architecture** that unifies batch and streaming pipelines using AWS cloud services.
 
-subgraph Data_Lake["S3 Data Lake"]
-    Raw["Raw Layer"]
-    Silver["Silver Layer"]
-    Gold["Gold Layer"]
-    Raw --> Silver --> Gold
-end
+The platform uses **S3 as a layered data lake**, **Airflow for orchestration**, **Athena for serverless analytics**, and **Redshift for warehouse serving and downstream consumption**.
 
-subgraph Processing["Processing & Orchestration"]
-    Airflow["Airflow DAGs"]
-end
+![Cloud Data Platform Architecture](assets/00_cloud-data-platform-architecture.png)
 
-subgraph Serving["Serving Layer"]
-    Athena["Athena"]
-    Redshift["Redshift"]
-end
+**Design principle:** Unify batch and streaming pipelines on cloud infrastructure using S3 as a layered data lake, Airflow for orchestration, Athena for serverless analytics, and Redshift for warehouse serving.
 
-Gold --> Athena
-Gold --> Redshift
-Airflow --> Silver
-Airflow --> Gold
-```
+### Key Components
+
+- **Batch Ingestion:** Loads CSV and structured data into the platform
+- **Streaming Ingestion:** Receives Kafka staging output for downstream processing
+- **Airflow DAG:** Orchestrates batch and streaming workflows
+- **S3 Data Lake:** Stores data across Raw, Silver, and Gold layers
+- **Athena:** Queries analytics-ready data directly from the S3 Gold Layer
+- **Redshift Warehouse:** Serves warehouse-optimized data for API and dashboard consumption
+
+👉 **This architecture separates storage, orchestration, analytics querying, and warehouse serving into clear layers.**
 
 ---
 
