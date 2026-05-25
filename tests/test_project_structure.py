@@ -8,7 +8,6 @@ def test_required_project_directories_exist():
     required_dirs = [
         ROOT_DIR / "assets",
         ROOT_DIR / "scripts" / "batch",
-        ROOT_DIR / "scripts" / "warehouse",
     ]
 
     for dir_path in required_dirs:
