@@ -6,6 +6,9 @@
 ![Warehouse](https://img.shields.io/badge/Warehouse-Redshift-red)
 ![Query](https://img.shields.io/badge/Query-Athena-blue)
 ![Orchestration](https://img.shields.io/badge/Orchestration-Airflow-green)
+![CI](https://github.com/Chu-Thana/cloud-sales-warehouse-platform/actions/workflows/ci.yml/badge.svg)
+![Testing](https://img.shields.io/badge/Testing-pytest-0A9EDC?logo=pytest&logoColor=white)
+![Code Quality](https://img.shields.io/badge/Code%20Quality-Ruff-8A2BE2)
 
 ---
 
@@ -19,6 +22,23 @@ Designed and implemented a **cloud-based data platform on AWS** supporting batch
 * Designed system for **scalability, performance, and data reliability**
 
 👉 This is a **production-style data platform**, not just a pipeline.
+
+---
+
+## ⚙️ CI Validation
+
+![Project 5 Cloud Warehouse CI](assets/cicd/project5-cloud-warehouse-ci-success.png)
+
+This project includes a GitHub Actions CI workflow that runs automatically on every push to the `main` branch.
+
+The CI pipeline validates:
+
+- Code quality with Ruff
+- Project structure for cloud platform components
+- Required architecture assets and documentation evidence
+- Batch scripts used for S3 data lake preparation
+
+👉 This helps ensure that the cloud warehouse platform remains maintainable, organized, and ready for further cloud deployment or orchestration work.
 
 ---
 
