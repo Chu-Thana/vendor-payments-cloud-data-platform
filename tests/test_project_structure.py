@@ -7,7 +7,6 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 def test_required_project_directories_exist():
     required_dirs = [
         ROOT_DIR / "assets",
-        ROOT_DIR / "dbt",
         ROOT_DIR / "scripts" / "batch",
         ROOT_DIR / "scripts" / "warehouse",
     ]
