@@ -37,10 +37,11 @@ def build_upload_plan() -> list[tuple[Path, str]]:
     ]
 
     for file_path in sorted(GOLD_SAMPLE_DIR.glob("*.csv")):
+        table_name = file_path.stem
         upload_plan.append(
             (
                 file_path,
-                f"{S3_PREFIX}/gold/sample/{file_path.name}",
+                f"{S3_PREFIX}/gold/sample/{table_name}/{file_path.name}",
             )
         )
 
