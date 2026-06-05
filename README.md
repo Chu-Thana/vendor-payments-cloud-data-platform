@@ -1,160 +1,303 @@
-# ☁️ Cloud Data Platform (AWS Data Lakehouse)
+# ☁️ Vendor Payments Cloud Data Platform
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Cloud](https://img.shields.io/badge/Cloud-AWS-yellow)
 ![Data Lake](https://img.shields.io/badge/Data_Lake-S3-orange)
-![Warehouse](https://img.shields.io/badge/Warehouse-Redshift-red)
 ![Query](https://img.shields.io/badge/Query-Athena-blue)
-![Orchestration](https://img.shields.io/badge/Orchestration-Airflow-green)
-![CI](https://github.com/Chu-Thana/cloud-sales-warehouse-platform/actions/workflows/ci.yml/badge.svg)
 ![Testing](https://img.shields.io/badge/Testing-pytest-0A9EDC?logo=pytest&logoColor=white)
 ![Code Quality](https://img.shields.io/badge/Code%20Quality-Ruff-8A2BE2)
+![CI](https://github.com/Chu-Thana/vendor-payments-cloud-data-platform/actions/workflows/ci.yml/badge.svg)
 
 ---
 
 ## 📌 Summary
 
-Designed and implemented a **cloud-based data platform on AWS** supporting batch and streaming workloads with a unified data lake architecture.
+This project extends the **Vendor Payments batch ETL pipeline** into an AWS cloud data platform.
 
-* Built S3 data lake with **raw / silver / gold layers**
-* Enabled analytics via **Athena (serverless)** and **Redshift (data warehouse)**
-* Orchestrated pipelines using **Airflow**
-* Designed system for **scalability, performance, and data reliability**
+The platform publishes validated outputs from the ETL pipeline into an S3-based data lake and enables serverless analytics using Amazon Athena.
 
-👉 This is a **production-style data platform**, not just a pipeline.
+```text
+Vendor Payments ETL Outputs
+→ S3 Data Lake
+→ Raw / Silver / Gold / Reports Zones
+→ Athena External Tables
+→ SQL Analytics over Gold Marts
+```
 
----
-
-## ⚙️ CI Validation
-
-![Project 5 Cloud Warehouse CI](assets/cicd/project5-cloud-warehouse-ci-success.png)
-
-This project includes a GitHub Actions CI workflow that runs automatically on every push to the `main` branch.
-
-The CI pipeline validates:
-
-- Code quality with Ruff
-- Project structure for cloud platform components
-- Required architecture assets and documentation evidence
-- Batch scripts used for S3 data lake preparation
-
-👉 This helps ensure that the cloud warehouse platform remains maintainable, organized, and ready for further cloud deployment or orchestration work.
+This project focuses on the cloud analytics layer of the batch data pipeline.
 
 ---
 
-## 🧭 Architecture Overview
+## 🧭 Role in the Data Platform
 
-This project demonstrates a **cloud data platform architecture** that unifies batch and streaming pipelines using AWS cloud services.
+This repository is part of a larger production-style data engineering portfolio.
 
-The platform uses **S3 as a layered data lake**, **Airflow for orchestration**, **Athena for serverless analytics**, and **Redshift for warehouse serving and downstream consumption**.
-
-![Cloud Data Platform Architecture](assets/00_cloud-data-platform-architecture.png)
-
-**Design principle:** Unify batch and streaming pipelines on cloud infrastructure using S3 as a layered data lake, Airflow for orchestration, Athena for serverless analytics, and Redshift for warehouse serving.
-
-### Key Components
-
-- **Batch Ingestion:** Loads CSV and structured data into the platform
-- **Streaming Ingestion:** Receives Kafka staging output for downstream processing
-- **Airflow DAG:** Orchestrates batch and streaming workflows
-- **S3 Data Lake:** Stores data across Raw, Silver, and Gold layers
-- **Athena:** Queries analytics-ready data directly from the S3 Gold Layer
-- **Redshift Warehouse:** Serves warehouse-optimized data for API and dashboard consumption
-
-👉 **This architecture separates storage, orchestration, analytics querying, and warehouse serving into clear layers.**
+| Layer | Repository | Responsibility |
+|---|---|---|
+| Batch ETL | `vendor-payments-etl-analytics` | Clean, validate, transform, and build silver/gold outputs |
+| Orchestration | `vendor-payments-airflow-orchestration` | Orchestrate the Vendor Payments ETL pipeline with Airflow |
+| Cloud Platform | `vendor-payments-cloud-data-platform` | Upload ETL outputs to S3 and query gold marts with Athena |
 
 ---
 
-## 📊 Cloud Metrics (Performance & Scale)
+## 🏗️ Architecture
 
-* Built data lake with **3 layers (raw / silver / gold)** on S3
-* Managed **4 schemas** in Redshift (raw, staging, mart, serving)
-* Created **analytical mart table for aggregation queries**
+```text
+Project 1: Vendor Payments ETL
+raw CSV
+→ data readiness checks
+→ silver transformation
+→ gold marts
+→ validation reports
 
-### ⚡ Query Performance
-
-* Athena query execution: **~0.31 sec**
-* Redshift query execution: **~0.47 sec**
-
-### 📦 Data Volume
-
-* Total data processed in S3: **~477 KB**
-
-👉 Metrics collected from real query executions and pipeline outputs
-
----
-
-## 📸 Pipeline Evidence
-
-### 1️⃣ S3 Data Lake Structure
-
-![S3 Data Lake](assets/01_s3_data_lake_structure.png)
-
-> Organized into raw / silver / gold layers following data lake best practices
+Project 5: Cloud Data Platform
+local ETL outputs
+→ S3 raw zone
+→ S3 silver zone
+→ S3 gold zone
+→ S3 reports zone
+→ Athena external tables
+→ SQL analytics
+```
 
 ---
 
-### 2️⃣ Athena Query Performance
+## 🪣 S3 Data Lake Layout
 
-![Athena Query](assets/02_athena_query_performance.png)
+The S3 data lake is organized into clear zones:
 
-> Serverless analytics with sub-second query performance
+```text
+s3://vendor-payments-data-platform-thana/data-platform/vendor-payments/
+│
+├── raw/
+│   └── sample/
+│       └── vendor_payments_sample.csv
+│
+├── silver/
+│   └── sample/
+│       └── vendor_payments_silver_sample.csv
+│
+├── gold/
+│   └── sample/
+│       ├── mart_fund_category_summary/
+│       ├── mart_pending_by_department/
+│       ├── mart_spending_by_department/
+│       ├── mart_spending_by_fiscal_year/
+│       └── mart_spending_by_supplier_top_n/
+│
+└── reports/
+    └── sample/
+        └── data quality and validation reports
+```
 
----
-
-### 3️⃣ Redshift Query Performance
-
-![Redshift Query](assets/03_redshift_query_performance.png)
-
-> Warehouse-based aggregation for structured analytics workloads
-
----
-
-## ⚙️ Key Design Principles
-
-* **Layered architecture**: raw → silver → gold
-* **Separation of storage and compute** (S3 + Athena / Redshift)
-* **Serverless-first analytics design**
-* **Orchestrated pipelines via Airflow**
-* **Reproducible data transformations**
-
----
-
-## ⚡ Scalability & Performance
-
-* S3 provides **unlimited scalable storage**
-* Athena enables **on-demand serverless queries**
-* Redshift supports **high-performance analytical workloads**
-* Airflow enables **modular pipeline orchestration**
+![S3 Data Lake Layout](assets/vendor-payments-cloud/01_s3_data_lake_layout.png)
 
 ---
 
-## 🚨 Reliability & Data Quality
+## 📦 Gold Marts Uploaded to S3
 
-* Structured data flow ensures traceability across layers
-* Data transformations are reproducible and deterministic
-* Airflow enables retries and pipeline recovery
-* Gold layer serves as **single source of truth for analytics**
+Gold mart outputs are uploaded into table-specific folders so that Athena external tables can query them reliably.
+
+![S3 Gold Marts Uploaded](assets/vendor-payments-cloud/02_s3_gold_marts_uploaded.png)
+
+---
+
+## 🔎 Athena Query Layer
+
+Athena is used as a serverless query layer over S3 gold marts.
+
+Created Athena database:
+
+```sql
+vendor_payments_analytics
+```
+
+Created external tables:
+
+```text
+mart_spending_by_fiscal_year
+mart_spending_by_supplier_top_n
+mart_pending_by_department
+```
+
+![Athena External Tables Created](assets/vendor-payments-cloud/03_athena_external_tables_created.png)
+
+---
+
+## 📊 Athena Query Result
+
+Example query:
+
+```sql
+SELECT
+    fiscal_year,
+    total_vouchers_paid,
+    total_vouchers_pending,
+    record_count,
+    unique_suppliers
+FROM vendor_payments_analytics.mart_spending_by_fiscal_year
+ORDER BY fiscal_year;
+```
+
+Result:
+
+![Athena Query Spending by Fiscal Year](assets/vendor-payments-cloud/04_athena_query_spending_by_fiscal_year.png)
+
+This confirms that the S3 gold mart can be queried successfully through Athena.
+
+---
+
+## ⚙️ Upload Workflow
+
+The upload script reads sample outputs from the local Vendor Payments ETL project and uploads them to S3.
+
+```text
+scripts/batch/upload_to_s3.py
+```
+
+The script uploads:
+
+```text
+raw sample file
+silver sample file
+gold mart CSV files
+data readiness and validation reports
+```
+
+### Environment Variables
+
+```env
+AWS_PROFILE=default
+AWS_REGION=ap-southeast-1
+
+S3_BUCKET=vendor-payments-data-platform-thana
+S3_PREFIX=data-platform/vendor-payments
+
+PROJECT1_ROOT=E:\dev\vendor-payments-etl-analytics
+```
+
+### Run Upload
+
+```bash
+python scripts/batch/upload_to_s3.py
+```
+
+---
+
+## 🧪 Testing & CI
+
+This project includes automated tests for:
+
+- Required project structure
+- S3 upload plan generation
+- Local file validation before upload
+- S3 key structure
+- Athena SQL files
+- Required Athena tables and query references
+
+Run locally:
+
+```bash
+python -m pytest -v
+python -m ruff check .
+```
+
+GitHub Actions validates the project on every push.
+
+![Project 5 CI Success](assets/vendor-payments-cloud/05_project5_ci_success.png)
+
+---
+
+## 📁 Repository Structure
+
+```text
+vendor-payments-cloud-data-platform/
+│
+├── scripts/
+│   └── batch/
+│       └── upload_to_s3.py
+│
+├── sql/
+│   └── athena/
+│       ├── 01_create_database.sql
+│       ├── 02_create_gold_tables.sql
+│       ├── 03_query_spending_by_fiscal_year.sql
+│       ├── 04_query_top_suppliers.sql
+│       └── 05_query_pending_by_department.sql
+│
+├── tests/
+│   ├── test_project_structure.py
+│   ├── test_upload_to_s3.py
+│   └── test_athena_sql_files.py
+│
+├── assets/
+│   └── vendor-payments-cloud/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── .env.example
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## 🔐 Cloud Design Notes
+
+This project intentionally keeps AWS credentials out of the repository.
+
+Configuration is handled through:
+
+- AWS CLI profile
+- Environment variables
+- `.env.example` for documentation only
+
+The CI workflow does not upload to AWS.  
+It validates local logic, SQL files, project structure, and code quality without requiring cloud credentials.
 
 ---
 
 ## 🧠 What This Project Demonstrates
 
-* End-to-end **cloud data architecture on AWS**
-* Data lake design with **multi-layer processing**
-* Integration of **Athena + Redshift for dual analytics workloads**
-* Orchestration using Airflow
-* Real-world focus on **performance, scalability, and system design**
+- AWS S3 data lake design
+- Raw / silver / gold / reports cloud layout
+- Upload automation with Python and boto3
+- Athena external table creation
+- Serverless SQL analytics over S3
+- CI validation for cloud platform code
+- Clean separation between ETL, orchestration, and cloud analytics layers
+
+---
+
+## ✅ Current Status
+
+| Component | Status |
+|---|---|
+| S3 bucket created | ✅ Done |
+| Raw sample uploaded | ✅ Done |
+| Silver sample uploaded | ✅ Done |
+| Gold marts uploaded | ✅ Done |
+| Reports uploaded | ✅ Done |
+| Athena database created | ✅ Done |
+| Athena external tables created | ✅ Done |
+| Athena query successful | ✅ Done |
+| Pytest validation | ✅ Passed |
+| Ruff code quality | ✅ Passed |
+| GitHub Actions CI | ✅ Passed |
 
 ---
 
 ## 💡 Key Takeaway
 
-This project demonstrates how to build a **modern cloud data platform**:
+This project shows how batch ETL outputs can be published into a cloud data lake and queried using a serverless analytics layer.
 
-* Scalable storage (S3)
-* Serverless analytics (Athena)
-* Warehouse optimization (Redshift)
-* Reliable orchestration (Airflow)
+It completes the batch pipeline story:
 
-👉 Focused on **real-world system design**, not just tools
+```text
+Validated ETL
+→ Airflow orchestration
+→ S3 cloud data lake
+→ Athena analytics
+```
