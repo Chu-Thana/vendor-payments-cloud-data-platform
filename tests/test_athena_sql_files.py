@@ -12,6 +12,8 @@ EXPECTED_SQL_FILES = [
     "03_query_spending_by_fiscal_year.sql",
     "04_query_top_suppliers.sql",
     "05_query_pending_by_department.sql",
+    "06_create_streaming_events_table.sql",
+    "07_query_streaming_events.sql",
 ]
 
 
@@ -57,3 +59,23 @@ def test_query_files_reference_vendor_payments_database():
 
         assert "vendor_payments_analytics" in content
         assert "SELECT" in content
+
+def test_streaming_table_sql_contains_expected_location_and_columns():
+    sql_file = ATHENA_SQL_DIR / "06_create_streaming_events_table.sql"
+    content = sql_file.read_text(encoding="utf-8")
+
+    assert "CREATE EXTERNAL TABLE" in content
+    assert "vendor_payments_streaming_events" in content
+    assert "data-platform/vendor-payments/streaming/curated" in content
+    assert "event_id" in content
+    assert "event_timestamp" in content
+    assert "payment_amount" in content
+
+
+def test_streaming_query_file_references_streaming_table():
+    sql_file = ATHENA_SQL_DIR / "07_query_streaming_events.sql"
+    content = sql_file.read_text(encoding="utf-8")
+
+    assert "vendor_payments_analytics.vendor_payments_streaming_events" in content
+    assert "COUNT(DISTINCT event_id)" in content
+    assert "CAST(payment_amount AS DOUBLE)" in content
