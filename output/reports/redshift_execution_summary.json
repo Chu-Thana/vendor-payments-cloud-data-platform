@@ -1,0 +1,70 @@
+{
+  "project": "Vendor Payments Cloud Data Platform",
+  "component": "Amazon Redshift Serverless",
+  "pipeline_version": "1.0.0",
+  "generated_at": "2026-06-20T20:58:25.263154+00:00",
+  "execution": {
+    "started_at": "2026-06-20T20:58:13.124067+00:00",
+    "completed_at": "2026-06-20T20:58:25.263154+00:00",
+    "runtime_seconds": 12.14,
+    "status": "PASS"
+  },
+  "redshift": {
+    "region": "ap-southeast-1",
+    "workgroup": "default-workgroup",
+    "database": "dev",
+    "architecture": {
+      "landing_schema": "landing",
+      "analytics_schema": "analytics"
+    }
+  },
+  "batch": {
+    "landing_table_count": 5,
+    "landing_total_rows": 2944,
+    "landing_tables": [
+      {
+        "table_name": "fund_category_summary",
+        "row_count": 1061
+      },
+      {
+        "table_name": "pending_by_department",
+        "row_count": 642
+      },
+      {
+        "table_name": "spending_by_department",
+        "row_count": 1121
+      },
+      {
+        "table_name": "spending_by_fiscal_year",
+        "row_count": 20
+      },
+      {
+        "table_name": "spending_by_supplier_top_n",
+        "row_count": 100
+      }
+    ],
+    "analytics_view_count": 5,
+    "validation_status": "PASS"
+  },
+  "streaming": {
+    "landing_table_count": 1,
+    "landing_metrics": {
+      "total_rows": 100000,
+      "rows_with_event_id": 100000,
+      "distinct_event_ids": 100000,
+      "duplicate_event_ids": 0,
+      "missing_event_ids": 0
+    },
+    "analytics_view_count": 4,
+    "analytics_metrics": {
+      "fiscal_year_rows": 20,
+      "total_events": 100000,
+      "total_distinct_events": 100000,
+      "total_payment_amount": "150580975432.60"
+    },
+    "validation_status": "PASS"
+  },
+  "validation": {
+    "status": "PASS"
+  }
+}

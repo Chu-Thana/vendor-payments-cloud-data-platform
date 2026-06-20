@@ -28,6 +28,6 @@ jobs:
         run: |
           python -m ruff check .
 
-      - name: Run project structure validation tests
+      - name: Run automated tests
         run: |
-          python -m pytest tests/test_project_structure.py
+          python -m pytest -q
