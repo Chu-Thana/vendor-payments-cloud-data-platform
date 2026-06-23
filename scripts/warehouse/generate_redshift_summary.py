@@ -33,6 +33,19 @@ REDSHIFT_DATABASE = os.getenv(
 POLL_INTERVAL_SECONDS = 1
 STATEMENT_TIMEOUT_SECONDS = 300
 
+REQUIRED_TOP_LEVEL_SECTIONS = {
+    "project",
+    "component",
+    "pipeline_version",
+    "generated_at",
+    "execution",
+    "redshift",
+    "batch",
+    "streaming",
+    "validation",
+    "artifact",
+}
+
 
 def wait_for_statement(
     client: Any,
@@ -370,6 +383,43 @@ def normalize_for_json(value: Any) -> Any:
     return value
 
 
+def validate_summary_metadata(
+    summary: dict[str, Any],
+) -> None:
+    """Validate required execution-summary metadata."""
+
+    missing_sections = (
+        REQUIRED_TOP_LEVEL_SECTIONS - summary.keys()
+    )
+
+    if missing_sections:
+        missing = ", ".join(
+            sorted(missing_sections),
+        )
+        raise ValueError(
+            "Execution summary is missing required "
+            f"sections: {missing}"
+        )
+
+    if summary["execution"]["status"] not in {
+        "PASS",
+        "FAIL",
+    }:
+        raise ValueError(
+            "Execution summary contains an invalid "
+            "execution status."
+        )
+
+    if summary["validation"]["status"] not in {
+        "PASS",
+        "FAIL",
+    }:
+        raise ValueError(
+            "Execution summary contains an invalid "
+            "validation status."
+        )
+
+
 def main() -> None:
     started_at = datetime.now(timezone.utc)
     started_monotonic = time.monotonic()
@@ -420,7 +470,15 @@ def main() -> None:
         "validation": {
             "status": overall_status,
         },
+        "artifact": {
+            "path": OUTPUT_FILE.relative_to(
+                PROJECT_ROOT,
+            ).as_posix(),
+            "format": "json",
+        },
     }
+
+    validate_summary_metadata(summary)
 
     OUTPUT_FILE.parent.mkdir(
         parents=True,

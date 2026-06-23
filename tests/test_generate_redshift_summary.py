@@ -2,10 +2,13 @@ from __future__ import annotations
 
 from decimal import Decimal
 
+import pytest
+
 from scripts.warehouse.generate_redshift_summary import (
     normalize_for_json,
     validate_batch_metrics,
     validate_streaming_metrics,
+    validate_summary_metadata,
 )
 
 
@@ -99,3 +102,92 @@ def test_normalize_for_json_converts_decimal() -> None:
     assert result == {
         "total_payment_amount": 150580975432.60,
     }
+
+
+def build_valid_summary() -> dict[str, object]:
+    return {
+        "project": "Vendor Payments Cloud Data Platform",
+        "component": "Amazon Redshift Serverless",
+        "pipeline_version": "1.0.0",
+        "generated_at": "2026-06-22T17:11:10+00:00",
+        "execution": {
+            "started_at": "2026-06-22T17:07:45+00:00",
+            "completed_at": "2026-06-22T17:11:10+00:00",
+            "runtime_seconds": 188.58,
+            "status": "PASS",
+        },
+        "redshift": {
+            "region": "ap-southeast-1",
+            "workgroup": "default-workgroup",
+            "database": "dev",
+            "architecture": {
+                "landing_schema": "landing",
+                "analytics_schema": "analytics",
+            },
+        },
+        "batch": {
+            "landing_table_count": 5,
+            "analytics_view_count": 5,
+            "validation_status": "PASS",
+        },
+        "streaming": {
+            "landing_table_count": 1,
+            "analytics_view_count": 4,
+            "validation_status": "PASS",
+        },
+        "validation": {
+            "status": "PASS",
+        },
+        "artifact": {
+            "path": (
+                "output/reports/"
+                "redshift_execution_summary.json"
+            ),
+            "format": "json",
+        },
+    }
+
+
+def test_validate_summary_metadata_passes() -> None:
+    summary = build_valid_summary()
+
+    validate_summary_metadata(summary)
+
+
+def test_validate_summary_metadata_fails_when_section_missing() -> None:
+    summary = build_valid_summary()
+    summary.pop("artifact")
+
+    with pytest.raises(
+        ValueError,
+        match="missing required sections: artifact",
+    ):
+        validate_summary_metadata(summary)
+
+
+def test_validate_summary_metadata_fails_for_execution_status() -> None:
+    summary = build_valid_summary()
+    execution = summary["execution"]
+
+    assert isinstance(execution, dict)
+    execution["status"] = "UNKNOWN"
+
+    with pytest.raises(
+        ValueError,
+        match="invalid execution status",
+    ):
+        validate_summary_metadata(summary)
+
+
+def test_validate_summary_metadata_fails_for_validation_status() -> None:
+    summary = build_valid_summary()
+    validation = summary["validation"]
+
+    assert isinstance(validation, dict)
+    validation["status"] = "UNKNOWN"
+
+    with pytest.raises(
+        ValueError,
+        match="invalid validation status",
+    ):
+        validate_summary_metadata(summary)
