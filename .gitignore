@@ -59,7 +59,12 @@ data/**/*.json
 # =========================
 
 logs/
-output/
+
+output/*
+!output/reports/
+output/reports/*
+!output/reports/redshift_execution_summary.json
+
 *.log
 
 # =========================
