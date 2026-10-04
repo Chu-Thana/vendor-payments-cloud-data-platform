@@ -1,14 +1,14 @@
-CREATE TABLE IF NOT EXISTS landing.vendor_payments_streaming_events (
+CREATE TABLE IF NOT EXISTS landing.spending_by_fiscal_year (
     fiscal_year                 INTEGER,
     total_vouchers_paid         DECIMAL(20, 2),
     total_vouchers_pending      DECIMAL(20, 2),
     total_encumbrance_balance   DECIMAL(20, 2),
     total_pending_retainage     DECIMAL(20, 2),
     record_count                BIGINT,
-    unique_suppliers            BIGINT,
     negative_paid_records       BIGINT,
     large_paid_1m_records       BIGINT,
-    missing_po_date_records     BIGINT
+    missing_po_date_records     BIGINT,
+    unique_suppliers            BIGINT
 );
 
 
@@ -21,10 +21,10 @@ CREATE TABLE IF NOT EXISTS landing.spending_by_department (
     total_encumbrance_balance   DECIMAL(20, 2),
     total_pending_retainage     DECIMAL(20, 2),
     record_count                BIGINT,
-    unique_suppliers            BIGINT,
     negative_paid_records       BIGINT,
     large_paid_1m_records       BIGINT,
-    missing_po_date_records     BIGINT
+    missing_po_date_records     BIGINT,
+    unique_suppliers            BIGINT
 );
 
 
@@ -35,10 +35,10 @@ CREATE TABLE IF NOT EXISTS landing.spending_by_supplier_top_n (
     total_encumbrance_balance   DECIMAL(20, 2),
     total_pending_retainage     DECIMAL(20, 2),
     record_count                BIGINT,
-    unique_suppliers            BIGINT,
     negative_paid_records       BIGINT,
     large_paid_1m_records       BIGINT,
-    missing_po_date_records     BIGINT
+    missing_po_date_records     BIGINT,
+    unique_suppliers            BIGINT
 );
 
 
@@ -51,10 +51,10 @@ CREATE TABLE IF NOT EXISTS landing.fund_category_summary (
     total_encumbrance_balance   DECIMAL(20, 2),
     total_pending_retainage     DECIMAL(20, 2),
     record_count                BIGINT,
-    unique_suppliers            BIGINT,
     negative_paid_records       BIGINT,
     large_paid_1m_records       BIGINT,
-    missing_po_date_records     BIGINT
+    missing_po_date_records     BIGINT,
+    unique_suppliers            BIGINT
 );
 
 
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS landing.pending_by_department (
     total_encumbrance_balance   DECIMAL(20, 2),
     total_pending_retainage     DECIMAL(20, 2),
     record_count                BIGINT,
-    unique_suppliers            BIGINT,
     negative_paid_records       BIGINT,
     large_paid_1m_records       BIGINT,
-    missing_po_date_records     BIGINT
+    missing_po_date_records     BIGINT,
+    unique_suppliers            BIGINT
 );

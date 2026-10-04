@@ -56,6 +56,7 @@ def normalize_results(
         "source_record_count",
         "total_vouchers_paid",
         "total_vouchers_pending",
+        "total_encumbrance_balance",
     }
 
     normalized_results: list[dict[str, str]] = []

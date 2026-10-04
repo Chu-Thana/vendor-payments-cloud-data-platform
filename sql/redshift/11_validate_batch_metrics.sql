@@ -3,7 +3,8 @@ SELECT
     COUNT(*) AS row_count,
     SUM(record_count) AS source_record_count,
     SUM(total_vouchers_paid) AS total_vouchers_paid,
-    SUM(total_vouchers_pending) AS total_vouchers_pending
+    SUM(total_vouchers_pending) AS total_vouchers_pending,
+    SUM(total_encumbrance_balance) AS total_encumbrance_balance
 FROM landing.spending_by_fiscal_year
 
 UNION ALL
@@ -13,7 +14,8 @@ SELECT
     COUNT(*) AS row_count,
     SUM(record_count) AS source_record_count,
     SUM(total_vouchers_paid) AS total_vouchers_paid,
-    SUM(total_vouchers_pending) AS total_vouchers_pending
+    SUM(total_vouchers_pending) AS total_vouchers_pending,
+    SUM(total_encumbrance_balance) AS total_encumbrance_balance
 FROM landing.spending_by_supplier_top_n
 
 UNION ALL
@@ -23,5 +25,6 @@ SELECT
     COUNT(*) AS row_count,
     SUM(record_count) AS source_record_count,
     SUM(total_vouchers_paid) AS total_vouchers_paid,
-    SUM(total_vouchers_pending) AS total_vouchers_pending
+    SUM(total_vouchers_pending) AS total_vouchers_pending,
+    SUM(total_encumbrance_balance) AS total_encumbrance_balance
 FROM landing.pending_by_department;

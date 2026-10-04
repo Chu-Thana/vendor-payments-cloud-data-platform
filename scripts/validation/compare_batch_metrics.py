@@ -67,6 +67,7 @@ def compare_batch_metrics(
         for metric_name in (
             "total_vouchers_paid",
             "total_vouchers_pending",
+            "total_encumbrance_balance",
         ):
             athena_value = Decimal(
                 athena[metric_name]
